@@ -14,12 +14,13 @@ ssl_context = ssl.create_default_context()
 ssl_context.check_hostname = False
 ssl_context.verify_mode = ssl.CERT_NONE
 
-# async engine with SSL
+# async engine with SSL and pool_recycle
 engine = create_async_engine(
     DATABASE_URL,
     echo=True,
     future=True,
-    connect_args={"ssl": ssl_context}
+    connect_args={"ssl": ssl_context},
+    pool_recycle=1800,
 )
 
 # async_sessionmaker

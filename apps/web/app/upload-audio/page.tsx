@@ -36,21 +36,21 @@ export default function UploadAudioPage() {
   };
 
   return (
-    <div className="flex h-screen w-screen bg-[#0e0e0f] overflow-hidden">
+    <div className="flex h-full w-full bg-[#0e0e0f] overflow-hidden">
       <div className="flex flex-col flex-1 h-full w-full">
         <TopBarUploadAudio />
-        <div className="flex-1 overflow-y-auto ">
-          <main className="flex flex-col !px-[96px] !py-6 gap-6 font-sans">
-            <div id="step1" ref={step1Ref} className="scroll-mt-[120px]">
+        <div className="flex-1 overflow-y-auto">
+          <main className="flex flex-col px-2 sm:px-3 md:px-6 lg:px-8 xl:px-[96px] py-2 sm:py-3 gap-2 sm:gap-3 font-sans">
+            <div id="step1" ref={step1Ref} className="scroll-mt-[90px] sm:scroll-mt-[120px] md:scroll-mt-[160px] lg:scroll-mt-[200px] xl:scroll-mt-[180px]">
               <Step1Upload onUploadSuccess={() => scrollToStep(step2Ref)} />
             </div>
-            <div id="step2" ref={step2Ref} className="scroll-mt-[20px]">
+            <div id="step2" ref={step2Ref} className="scroll-mt-[10px] sm:scroll-mt-[120px] md:scroll-mt-[10px] lg:scroll-mt-[10px] xl:scroll-mt-[20px]">
               <Step2Sensitivity artistData={artistData} setArtistData={setArtistData} onNext={() => scrollToStep(step3Ref)} />
             </div>
-            <div id="step3" ref={step3Ref} className="scroll-mt-[1px]">
+            <div id="step3" ref={step3Ref} className="scroll-mt-[10px] sm:scroll-mt-[120px] md:scroll-mt-[10px] lg:scroll-mt-[10px] xl:scroll-mt-[1px]">
               <Step3Profile artistData={artistData} setArtistData={setArtistData} onDone={() => { scrollToStep(step4Ref); setShouldSubmit(true); }} />
             </div>
-            <div id="step4" ref={step4Ref} className="scroll-mt-[10px]">
+            <div id="step4" ref={step4Ref} className="scroll-mt-[-280px] sm:scroll-mt-[120px] md:scroll-mt-[10px] lg:scroll-mt-[10px] xl:scroll-mt-[10px]">
               <Step4Publish artistData={artistData} setArtistData={setArtistData} shouldSubmit={shouldSubmit} setShouldSubmit={setShouldSubmit} />
             </div>
           </main>

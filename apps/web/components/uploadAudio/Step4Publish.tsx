@@ -4,6 +4,23 @@ export default function Step4Publish({ artistData, setArtistData, shouldSubmit, 
   const [progress, setProgress] = useState(0);
   const targetProgress = 75; // Always show 75% as requested
 
+  // Responsive blur style state
+  const [blurStyle, setBlurStyle] = useState<{ filter: string }>({ filter: 'blur(60px)' });
+
+  useEffect(() => {
+    const getBlur = () => {
+      if (window.innerWidth >= 1280) return 'blur(140px)';
+      if (window.innerWidth >= 1024) return 'blur(120px)';
+      if (window.innerWidth >= 768) return 'blur(100px)';
+      if (window.innerWidth >= 640) return 'blur(80px)';
+      return 'blur(60px)';
+    };
+    setBlurStyle({ filter: getBlur() });
+    const handleResize = () => setBlurStyle({ filter: getBlur() });
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     // Animate progress to 75%
     const timer = setTimeout(() => {
@@ -59,32 +76,43 @@ export default function Step4Publish({ artistData, setArtistData, shouldSubmit, 
     return () => clearTimeout(timer);
   }, [artistData, shouldSubmit]);
 
-  // Calculate circle properties
-  const radius = 180;
-  const strokeWidth = 10;
+  // Calculate circle properties - responsive sizing
+  const getCircleSize = () => {
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth < 640) return 100; // mobile
+      if (window.innerWidth < 768) return 120; // sm
+      if (window.innerWidth < 1024) return 160; // md (set to 160)
+      if (window.innerWidth < 1280) return 160; // lg (keep 160)
+      return 180; // xl
+    }
+    return 180;
+  };
+
+  const radius = getCircleSize();
+  const strokeWidth = 6;
   const normalizedRadius = radius - strokeWidth * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
   const strokeDasharray = `${circumference} ${circumference}`;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
-    <div className="w-full h-[400px]  relative ">
+    <div className="w-full h-[700px] sm:h-[320px] md:h-[540px] lg:h-[580px] xl:h-[400px] relative">
       {/* Header */}
-      <div className="!pt-4  relative z-10">
-        <span className="text-[#9f9f9f] text-[15px] font-sans">Step 4</span>
-        <h1 className="text-white text-[28px] font-grotesk font-[450] !mt-1">
+      <div className="pt-3 sm:pt-4 relative z-10">
+        <span className="text-[#9f9f9f] text-[12px] sm:text-[13px] md:text-[14px] lg:text-[15px] xl:text-[16px] font-sans">Step 4</span>
+        <h1 className="text-white text-[18px] sm:text-[20px] md:text-[22px] lg:text-[25px] xl:text-[28px] font-grotesk font-[450] mt-1">
           Tagging and Categorization
         </h1>
       </div>
 
       {/* Main Content with Blur Background */}
-      <div className="absolute inset-0 flex items-center justify-center !mt-[230px]">
-        {/* Blur Background Circle */}
-        <div 
-          className="absolute w-[200px] h-[200px] rounded-full opacity-[0.46]"
+      <div className="absolute inset-0 flex items-center justify-center mt-[120px] sm:mt-[140px] md:mt-[160px] lg:mt-[180px] xl:!mt-[230px]">
+        {/* Blur Background Circle - responsive */}
+        <div
+          className="absolute rounded-full opacity-[0.46] w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] md:w-[140px] md:h-[140px] lg:w-[160px] lg:h-[160px] xl:w-[200px] xl:h-[200px]"
           style={{
             background: '#9164FF',
-            filter: 'blur(140px)',
+            ...blurStyle,
           }}
         ></div>
 
@@ -122,26 +150,28 @@ export default function Step4Publish({ artistData, setArtistData, shouldSubmit, 
                 cy={radius}
               />
             </svg>
-            
             {/* Text inside circle */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <div className="text-white text-[60px] font-grotesk font-[400] !leading-[0.7] tracking-wide">
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center"
+              style={{ fontSize: radius * 0.3 }} // Responsive font size based on radius
+            >
+              <div className="text-white font-grotesk font-[400] leading-[0.7] tracking-wide">
                 WE'RE
               </div>
-              <div className="text-white text-[60px] font-grotesk font-[400] !leading-[0.7] tracking-wide">
+              <div className="text-white font-grotesk font-[400] leading-[0.7] tracking-wide">
                 BUILDING
               </div>
-              <div className="text-white text-[60px] font-grotesk font-[400] !leading-[0.7] tracking-wide">
+              <div className="text-white font-grotesk font-[400] leading-[0.7] tracking-wide">
                 YOUR
               </div>
-              <div className="text-white text-[60px] font-grotesk font-[800] !leading-[0.7] tracking-wide !mt-1">
+              <div className="text-white font-grotesk font-[800] leading-[0.7] tracking-wide mt-1">
                 DNA
               </div>
             </div>
           </div>
 
           {/* Bottom text */}
-          <div className="text-[#9f9f9f] text-[13px] font-sans max-w-[480px] mx-auto !mt-2 !mb-8 tracking-wider">
+          <div className="text-[#9f9f9f] text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] xl:text-[13px] font-sans max-w-[280px] sm:max-w-[320px] md:max-w-[400px] lg:max-w-[480px] mx-auto mt-2 mb-6 sm:mb-8 tracking-wider px-3 sm:px-4">
             YOUR DNA WILL BE READY IN A FEW MINUTES. WE'LL INFORM YOU<br />
             ONCE IT'S READY. YOU CAN USE THE STUDIO MEANWHILE.
           </div>
