@@ -30,7 +30,7 @@ export default function ArtistsPage() {
       try {
         const backendUri = process.env.NEXT_PUBLIC_BACKEND_URI;
         if (!backendUri) throw new Error("Backend URI not set");
-        const res = await fetch(`${backendUri}artists`);
+        const res = await fetch(`${backendUri}/artists`);
         if (!res.ok) throw new Error("Failed to fetch artists");
         const data = await res.json();
         setArtists(data);
